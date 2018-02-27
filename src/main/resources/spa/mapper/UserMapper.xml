@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spa.mapper.UserMapper">
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (name, password) VALUES (#{name},#{password})
+    </insert>
+
+    <select id="findOne" resultType="User">
+        SELECT * FROM user WHERE id = #{id} OR name = #{name}
+    </select>
+</mapper>
