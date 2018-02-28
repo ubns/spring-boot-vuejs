@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Spring Boot</title>
@@ -9,8 +9,14 @@
 </head>
 <body>
 
-<div id="example">
-    <my-component></my-component>
+<div id="app">
+    <div>
+        <p>ユーザID：{{ users.id }}</p>
+        <p>ユーザ名：{{ users.name }}</p>
+        <p>パスワード：{{ users.password }}</p>
+    </div>
+    <button v-on:click="get">GET</button>
+    <button v-on:click="hoge">HOGE</button>
 </div>
     <script src="webjars/vue/2.5.3-1/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
