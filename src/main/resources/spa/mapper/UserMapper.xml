@@ -3,11 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="spa.mapper.UserMapper">
+    <resultMap id="UserResult" type="spa.model.User">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="email" column="email"></result>
+        <result property="password" column="password"></result>
+    </resultMap>
+
     <insert id="add" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (name, password) VALUES (#{name},#{password})
+        INSERT INTO user (name, email, password) VALUES (#{name}, #{email}, #{password})
     </insert>
 
     <select id="findOne" resultType="User">
         SELECT * FROM user WHERE id = #{id} OR name = #{name}
+    </select>
+
+    <select id="findAll" resultMap="UserResult">
+        SELECT * FROM user
     </select>
 </mapper>

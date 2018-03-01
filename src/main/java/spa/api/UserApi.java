@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import spa.model.User;
 import spa.service.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserApi {
@@ -30,5 +32,10 @@ public class UserApi {
     @GetMapping("{id}")
     public Object findById(@PathVariable int id) {
         return userService.findById(id);
+    }
+
+    @GetMapping("/list")
+    public List<User> findAll() {
+        return userService.findAll();
     }
 }

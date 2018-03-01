@@ -1,5 +1,6 @@
 package spa.service;
 
+import org.apache.ibatis.mapping.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spa.mapper.UserMapper;
@@ -7,6 +8,7 @@ import spa.model.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -55,5 +57,9 @@ public class UserService {
         User param = new User();
         param.setName(name);
         return userMapper.findOne(param);
+    }
+
+    public List<User> findAll() {
+        return userMapper.findAll();
     }
 }

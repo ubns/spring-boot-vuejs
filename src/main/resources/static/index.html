@@ -6,20 +6,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="webjars/bootstrap/3.2.0/css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 
 <div id="app">
-    <div>
-        <p>ユーザID：{{ users.id }}</p>
-        <p>ユーザ名：{{ users.name }}</p>
-        <p>パスワード：{{ users.password }}</p>
-    </div>
-    <button v-on:click="get">GET</button>
-    <button v-on:click="hoge">HOGE</button>
+    <x-header></x-header>
+    <main class="section main container">
+        <x-alert></x-alert>
+        <router-view></router-view>
+    </main>
 </div>
+
+<!-- Post Template -->
+<script id="posts" type="text/x-template">
+    <div class="container">
+        <h3>User List</h3>
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>MAIL</th>
+                        <th>PASSWORD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="list in users">
+                        <td>{{ list.id }}</td>
+                        <td>{{ list.name }}</td>
+                        <td>{{ list.email }}</td>
+                        <td>{{ list.password }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<!-- Header Template -->
+<script id="header" type="text/x-template">
+    <nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#gnavi">
+                <span class="sr-only">Menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <router-link class="navbar-brand" to="/">Single Page Application</router-link>
+        </div>
+
+        <div id="gnavi" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><router-link to="/signup">Sign Up</router-link></li>
+            </ul>
+        </div>
+    </nav>
+</script>
+
+<!-- Sign Up Template -->
+<script id="signup_form" type="text/x-template">
+    <div class="container">
+        <form v-on:submit="handleSubmit">
+            <label for="name">Name</label>
+            <p><input v-model="name" type="text" id="name" placeholder="Pick a Username"></p>
+            <label for="email">E-mail</label>
+            <p><input v-model="email" type="text" id="email" placeholder="you@example.com"></p>
+            <label for="password">Password</label>
+            <p><input v-model="password" type="password" id="password" placeholder="Create the password"></p>
+            <p><input type="submit" value="Sign up"></p>
+        </form>
+    </div>
+</script>
+
+<!-- Alert Template -->
+<script id="alert" type="text/x-template">
+    <div class="message">
+        {{ message }}
+    </div>
+</script>
+
     <script src="webjars/vue/2.5.3-1/vue.js"></script>
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="webjars/vue-router/2.2.1/dist/vue-router.js"></script>
     <script src="webjars/jquery/1.11.1/jquery.js"></script>
     <script src="webjars/bootstrap/3.2.0/js/bootstrap.js"></script>
     <script src="webjars/axios/0.5.4/dist/axios.js"></script>
