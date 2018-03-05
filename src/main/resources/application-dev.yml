@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/spa
+    username: xxxx
+    password: xxxx
+debug: true
+mybatis:
+  type-aliases-package: spa.model
+  config-location: classpath:mybatis.xml
