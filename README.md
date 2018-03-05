@@ -2,7 +2,7 @@
 Create Single Page Application
 
 #### Preparation
-Step1. Create DB and Table
+Create DB and Table
 
 ```mysql
 CREATE TABLE `user` (
@@ -13,8 +13,3 @@ CREATE TABLE `user` (
 	PRIMARY KEY (`id`)
 );
 ```
-
-Step2. Web API with Spring Boot
-
-Step3. Front End with Vue.js
-
