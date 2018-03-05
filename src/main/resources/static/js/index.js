@@ -109,7 +109,7 @@ var Post = {
 }
 
 var routes = [
-    {path: '/', component: Post},
+    {path: '/post', component: Post},
     {path: '/signup', component: SignupForm}
 ]
 
