@@ -6,3 +6,11 @@
 .message {
     color: darkred;
 }
+
+.navbar-nav.navbar-right:last-child {
+    margin-right: 0;
+}
+
+.nav a:hover {
+    cursor: pointer;
+}

@@ -62,4 +62,9 @@ public class UserService {
     public List<User> findAll() {
         return userMapper.findAll();
     }
+
+    public boolean comparePassword(User user, User userInDatabase) {
+        return passwordToHash(user.getPassword())
+                .equals(userInDatabase.getPassword());
+    }
 }

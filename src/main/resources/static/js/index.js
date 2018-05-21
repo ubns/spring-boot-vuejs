@@ -15,11 +15,27 @@ function emitInfo(message) {
 }
 
 function onInfo(fn) {
-    cm.$on('info', fn)
+    vm.$on('info', fn)
 }
 
 function handleError(errorMessage) {
     emitError(errorMessage)
+}
+
+function emitLogin() {
+    vm.$emit('login')
+}
+
+function onLogin(fn) {
+    vm.$on('login', fn)
+}
+
+function emitLogout() {
+    vm.$emit('logout')
+}
+
+function onLogout(fn) {
+    vm.$on('logout', fn)
 }
 
 var Alert = {
@@ -33,6 +49,9 @@ var Alert = {
         onError(function (errorMessage) {
             this.message = errorMessage
         }.bind(this))
+        onInfo(function (message) {
+            this.message = message
+        }.bind(this))
     }
 }
 
@@ -41,7 +60,20 @@ var Header = {
     template: '#header',
     data: function() {
         return {
-            user: ''
+            currentUser: JSON.parse(sessionStorage.getItem('currentUser'))
+        }
+    },
+    mounted: function () {
+        onLogin(function () {
+            this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
+        }.bind(this))
+    },
+    methods: {
+        logout: function () {
+                this.currentUser = null
+                sessionStorage.removeItem('token')
+                sessionStorage.removeItem('currentUser')
+                this.$router.push('/')
         }
     }
 }
@@ -81,8 +113,48 @@ var SignupForm = {
             }).then(function (res) {
                 if (res.data.error) {
                     handleError(res.data.error)
-                } else {
+                } else if (res.data.message != null) {
+                    handleError(res.data.message)
+                }else {
                     emitInfo('Completion!')
+                    this.$router.push('/login')
+                }
+            }.bind(this))
+        }
+    }
+}
+
+/* Login Form */
+var LoginForm = {
+    template: '#login_form',
+    data: function () {
+        return {
+            name: '',
+            password: ''
+        }
+    },
+    methods: {
+        handleSubmit: function (e) {
+            e.preventDefault()
+            if (this.name === '') {
+                handleError('Name is empty.')
+                return false
+            }
+            if (this.password === '') {
+                handleError('Password is empty.')
+                return false
+            }
+            axios.post('/api/authentication', {
+                name: this.name,
+                password: this.password
+            }).then(function (res) {
+                if (res.data.error) {
+                    handleError(res.data.error)
+                } else {
+                    sessionStorage.setItem('token', res.data.token)
+                    sessionStorage.setItem('currentUser', JSON.stringify(res.data.user));
+                    emitLogin()
+                    emitInfo()
                     this.$router.push('/')
                 }
             }.bind(this))
@@ -108,9 +180,17 @@ var Post = {
     }
 }
 
+var Top = {
+    template: '#main',
+    created: function () {
+        emitInfo()
+    }
+}
+
 var routes = [
-    {path: '/post', component: Post},
-    {path: '/signup', component: SignupForm}
+    {path: '/', component: Top},
+    {path: '/signup', component: SignupForm},
+    {path: '/login', component: LoginForm}
 ]
 
 var router = new VueRouter({

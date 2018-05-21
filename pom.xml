@@ -61,6 +61,12 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.22</version>
 		</dependency>
+		<!-- JavaJWT Library(Token生成用) -->
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.0.2</version>
+		</dependency>
 
 
 		<!-- FRONT END LIBRARY -->
@@ -95,6 +101,19 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 
 </project>
