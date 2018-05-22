@@ -125,6 +125,15 @@
 
 </script>
 
+<!-- New Post Template -->
+<script id="new-post" type="text/x-template">
+    <form v-on:submit="handleSubmit">
+        <input type="text" v-model="title" id="title" />
+        <textarea id="content" v-model="content"></textarea>
+        <input type="submit" class="button is-primary" value="登録">
+    </form>
+</script>
+
 <script src="webjars/vue/2.5.3-1/vue.js"></script>
 <script src="webjars/vue-router/2.2.1/dist/vue-router.js"></script>
 <script src="webjars/jquery/1.11.1/jquery.js"></script>

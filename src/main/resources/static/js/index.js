@@ -162,6 +162,50 @@ var LoginForm = {
     }
 }
 
+var NewPost = {
+    template: '#new-post',
+    data: function () {
+        return {
+            title: null,
+            content: null
+        }
+    },
+    beforeRouterEnter: function (to, from, next) {
+        if (sessionStorage.getItem('token') === null) {
+            next({path: 'login'})
+            emitInfo('ログインしてください')
+        } else {
+            next()
+        }
+    },
+    methods: {
+        handleSubmit: function (e) {
+            e.preventDefault()
+            if (this.title === null || this.title === '') {
+                handleError('タイトルが入力されていません')
+                return false
+            }
+            if (this.content === null || this.content === '') {
+                handleError('コンテンツが入力されていません')
+                return false
+            }
+            axios.post('/api/post', {
+                title: this.title,
+                content: this.content,
+            }, {
+                headers: {token: sessionStorage.getItem('token')}
+            }
+            ).then(function (res) {
+                if (res.data.error) {
+                    handleError(res.data.error)
+                    return
+                }
+                this.$router.push('/')
+            }.bind(this))
+        }
+    }
+}
+
 var Post = {
     template: '#posts',
     data: function () {
@@ -190,7 +234,8 @@ var Top = {
 var routes = [
     {path: '/', component: Top},
     {path: '/signup', component: SignupForm},
-    {path: '/login', component: LoginForm}
+    {path: '/login', component: LoginForm},
+    {path: '/posts/new', component: NewPost}
 ]
 
 var router = new VueRouter({
