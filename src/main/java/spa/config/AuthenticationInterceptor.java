@@ -1,30 +1,32 @@
 package spa.config;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+
 import spa.annotation.LoginRequired;
 import spa.model.User;
 import spa.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-
-public class AuthenticationInterceptor implements HandlerInterceptor{
-
+public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
     private UserService userService;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
@@ -35,21 +37,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
         // @LoginRequiredが付与されている場合
         if (methodAnnotation != null) {
             // 認証処理を行う
-            String token = request.getHeader("token");
-            if (token == null) throw new RuntimeException("tokenがありません");
-
+            String token = request.getHeader("token");  // 从 http 请求头中取出 token
+            if (token == null) {
+                throw new RuntimeException("tokenがありません");
+            }
             int userId;
             try {
-                userId = Integer.parseInt(JWT.decode(token).getAudience().get(0));
+                userId = Integer.parseInt(JWT.decode(token).getAudience().get(0));  // 获取 token 中的 user id
             } catch (JWTDecodeException e) {
-                throw new RuntimeException("tokenを取得できませんでした");
+                throw new RuntimeException("token情報を取得できませんでした");
             }
-
             User user = userService.findById(userId);
-            if (user == null) throw new RuntimeException("ユーザが存在しません");
-
+            if (user == null) {
+                throw new RuntimeException("ユーザが存在しません。もう一度ログインしてください。");
+            }
+            // 验证 token
             try {
-                JWTVerifier verifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
+                JWTVerifier verifier =  JWT.require(Algorithm.HMAC256(user.getPassword())).build();
                 try {
                     verifier.verify(token);
                 } catch (JWTVerificationException e) {
@@ -62,13 +66,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
         return true;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response, Object handler,
+                           ModelAndView modelAndView) throws Exception {
     }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) throws Exception {
-
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
     }
 }

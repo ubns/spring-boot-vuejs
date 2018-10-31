@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!-- Main Template -->
 <div id="app">
     <x-header></x-header>
     <main class="section main container">
@@ -26,74 +25,92 @@
     </div>
 </script>
 
-<!-- Post Template -->
+<!-- New Post Template -->
+<script id="new-post" type="text/javascript">
+    <form v-on:submit="handleSubmit" class="new-post">
+        <label for="title">タイトル</label>
+        <p class="control"><input type="text" v-model="title" id="title" class="input"></p>
+        <label for="content">内容</label>
+        <p class="control"><textarea id="content" v-model="content" class="textarea"></textarea></p>
+    <p class="control"><input type="submit" class="button is-primary" value="登録"></p>
+        </form>
+</script>
+
+<!-- Post List Template -->
 <script id="posts" type="text/x-template">
-    <div class="container">
-        <h3>User List</h3>
-        <div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>MAIL</th>
-                        <th>PASSWORD</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="list in users">
-                        <td>{{ list.id }}</td>
-                        <td>{{ list.name }}</td>
-                        <td>{{ list.email }}</td>
-                        <td>{{ list.password }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <ul class="content posts">
+        <li v-for="post in posts" class="box">
+            <router-link :to="'/posts/' + post.id"><h3 class="">{{ post.title }}</h3></router-link>
+            <p><strong>{{ post.author.name}}</strong>
+                <time>{{ post.createTime | dateFormat }}</time>
+            </p>
+            <section> {{ post.content.substring(0, 100) }} ...</section>
+        </li>
+    </ul>
+</script>
+
+<!--  Post Detail Template -->
+<script id="post-detail" type="text/x-template">
+    <div>
+        <div class="content post">
+            <h2 class="has-text-centered">{{ post.title }}</h2>
+            <div class="edit-btn" v-show="currentUser !== null && post.author.name === currentUser.name">[ <router-link :to="'/post/edit/' + post.id">編集</router-link> ]</div>
+            <p class="has-text-right"><strong>{{ post.author.name }}</strong>
+                <time>{{ post.createTime | dateFormat }}</time>
+            </p>
+            <section class="detail-content" v-html="compiledMarkdown"></section>
         </div>
     </div>
 </script>
 
+<!-- Post Edit -->
+<script id="post-edit" type="text/x-template">
+    <form v-on:submit="handleSubmit" class="new-post">
+        <label for="title">タイトル</label>
+        <p class="control"><input type="text" id="title" class="input"  v-model="post.title"></p>
+        <label for="content">内容</label>
+        <p class="control"><textarea id="content" class="textarea" v-model="post.content"></textarea></p>
+        <p class="control"><input type="submit" class="button is-primary" value="更新"></p>
+    </form>
+</script>
+
 <!-- Header Template -->
 <script id="header" type="text/x-template">
-    <nav class="navbar navbar-default">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#gnavi">
-                <span class="sr-only">Menu</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <router-link class="navbar-brand" to="/">Single Page Application</router-link>
+    <header>
+        <div class="site-title">
+            <router-link to="/">Post</router-link>
         </div>
 
-        <div id="gnavi" class="collapse navbar-collapse" class="header-menu">
-            <ul class="nav navbar-nav navbar-right" v-if="currentUser === null">
+        <div class="menu">
+            <ul v-if="currentUser === null">
                 <li>
                     <router-link to="/signup">Sign Up</router-link>
                 </li>
+                <li>or</li>
                 <li>
                     <router-link to="/login">Login</router-link>
                 </li>
             </ul>
-            <ul v-else class="nav navbar-nav navbar-right">
+            <ul v-else>
                 <li>
                     <a>{{ currentUser.name }}</a>
                 </li>
                 <li>
-                    <router-link to="/posts/new">New</router-link>
+                    <router-link to="/posts/new">New Post</router-link>
                 </li>
                 <li>
                     <a v-on:click="logout">Logout</a>
                 </li>
             </ul>
         </div>
-    </nav>
+    </header>
 </script>
 
 <!-- Sign Up Template -->
 <script id="signup_form" type="text/x-template">
     <div class="container">
         <form v-on:submit="handleSubmit">
+            <h3>Sign Up Form</h3>
             <label for="name">Name</label>
             <p><input v-model="name" type="text" id="name" placeholder="Pick a Username"></p>
             <label for="email">E-mail</label>
@@ -109,7 +126,7 @@
 <script id="login_form" type="text/x-template">
     <div class="login">
         <form v-on:submit="handleSubmit">
-            <h3>Login to Documents</h3>
+            <h3>Login Form</h3>
             <p><input v-model="name" type="text" placeholder="Name"></p>
             <p><input v-model="password" type="password" placeholder="Password"></p>
             <p><input class="button" type="submit" value="Login"></p>
@@ -117,28 +134,16 @@
     </div>
 </script>
 
-<!-- Main Template -->
-<script id="main" type="text/x-template">
-    <main>
-
-    </main>
-
-</script>
-
-<!-- New Post Template -->
-<script id="new-post" type="text/x-template">
-    <form v-on:submit="handleSubmit">
-        <input type="text" v-model="title" id="title" />
-        <textarea id="content" v-model="content"></textarea>
-        <input type="submit" class="button is-primary" value="登録">
-    </form>
-</script>
 
 <script src="webjars/vue/2.5.3-1/vue.js"></script>
 <script src="webjars/vue-router/2.2.1/dist/vue-router.js"></script>
 <script src="webjars/jquery/1.11.1/jquery.js"></script>
 <script src="webjars/bootstrap/3.2.0/js/bootstrap.js"></script>
 <script src="webjars/axios/0.5.4/dist/axios.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
 <script src="js/index.js"></script>
+
 </body>
 </html>

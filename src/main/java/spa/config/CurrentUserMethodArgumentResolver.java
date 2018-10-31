@@ -1,6 +1,5 @@
 package spa.config;
 
-import org.apache.tomcat.jni.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -8,14 +7,11 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+
 import spa.annotation.CurrentUser;
+import spa.model.User;
 
-/**
- * @CurrentUserアノテーションにより、
- * 現在ログインしているユーザ情報をUserオブジェクトへ格納する
- */
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().isAssignableFrom(User.class)

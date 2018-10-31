@@ -1,3 +1,14 @@
+/*
+ *********************
+ *  共通設定
+ *********************
+ */
+* {
+    boxsizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif, Arial;
+}
 
 .table > .table-bordered {
     border-radius: 3px;
@@ -11,6 +22,131 @@
     margin-right: 0;
 }
 
-.nav a:hover {
+.menu a:hover {
     cursor: pointer;
+}
+
+input,
+textarea {
+    border-radius: 5px;
+    border: 1px solid #999;
+    padding: 3px 7px;
+}
+
+strong {
+    color: #992323;
+}
+
+/*
+ *********************
+ *  ヘッダー
+ *********************
+ */
+header {
+    background: #373737;
+    color: #999;
+    font-weight: bold;
+    padding: 1em 17%;
+}
+
+header a{
+    color: #ddd;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.site-title {
+    font-size: 18px;
+    display: inline-block;
+
+}
+
+.menu {
+    float: right;
+    display: inline-block;
+}
+
+header li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 1em;
+}
+
+/*
+*********************
+*  メイン
+*********************
+*/
+main.section.main.container {
+    margin: 0;
+    padding: 2em 17%;
+    width: 100%;
+}
+
+.new-post input,
+.new-post textarea {
+    width: 100%;
+}
+
+.new-post textarea {
+    height: 400px;
+}
+
+.posts li {
+    list-style: none;
+}
+
+.edit-btn {
+    text-align: right;
+}
+
+/*
+*********************
+*  コンテンツ共有
+*********************
+*/
+.content {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.content ul,
+.content ol {
+    margin-left: 2em;
+}
+
+
+
+/*
+*********************
+*  コンテンツ詳細
+*********************
+*/
+.detail-content {
+    margin: 3em 0;
+    line-height: 24px;
+}
+
+
+/*
+ *********************
+ * Screen max 768px
+ *********************
+ */
+@media only screen and (max-width: 768px){
+    header {
+        background: #373737;
+        padding: 1em;
+    }
+
+    main.section.main.container {
+        margin: 0;
+        padding: 1em;
+    }
+
 }

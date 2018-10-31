@@ -1,6 +1,5 @@
 package spa.service;
 
-import org.apache.ibatis.mapping.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spa.mapper.UserMapper;

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="spa.mapper.PostMapper">
     <resultMap id="PostResultMap" type="spa.model.Post" autoMapping="true">
-        <id column="id" property="id" /> <!-- Primary Key -->
-
-        <association property="author" autoMapping="true"  columnPrefix="author__" javaType="spa.model.User">
+        <id column="id" property="id" />
+        <association property="author" autoMapping="true" columnPrefix="author__"
+                     javaType="spa.model.User">
             <id column="author_id" property="id" />
         </association>
     </resultMap>
@@ -12,6 +12,23 @@
     <insert id="add" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO post (author_id, title, content, create_time) VALUES (#{authorId}, #{title}, #{content}, #{createTime});
     </insert>
+
+    <update id="update">
+        UPDATE post
+        <set>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="content!=null">
+                content=#{content},
+            </if>
+        </set>
+        where post.id=#{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM post WHERE post.id=#{id}
+    </delete>
 
     <select id="findOne" resultMap="PostResultMap">
         <include refid="select-post" />
@@ -26,17 +43,18 @@
         <include refid="select-post" />
     </select>
 
-    <sql id="select-post">
+    <sql id="select-post" >
         SELECT
-          post.id,
-          post.author_id,
-          post.title,
-          post.content,
-          post.create_time,
-          post.update_time,
-          'user'.id as author__id,
-          'user'.name as author__name
+        post.id,
+        post.author_id ,
+        post.title ,
+        post.content ,
+        post.create_time ,
+        post.update_time,
+        <!-- 作者信息，password 不需要就不查了 -->
+        `user`.id as author__id,
+        `user`.`name` as author__name
         FROM post
-        LEFT JOIN 'user' ON 'user'.id = post.author_id
+        LEFT JOIN `user` ON `user`.id=post.author_id
     </sql>
 </mapper>
