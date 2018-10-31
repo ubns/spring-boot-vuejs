@@ -37,13 +37,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // @LoginRequiredが付与されている場合
         if (methodAnnotation != null) {
             // 認証処理を行う
-            String token = request.getHeader("token");  // 从 http 请求头中取出 token
+            String token = request.getHeader("token");
             if (token == null) {
                 throw new RuntimeException("tokenがありません");
             }
             int userId;
             try {
-                userId = Integer.parseInt(JWT.decode(token).getAudience().get(0));  // 获取 token 中的 user id
+                userId = Integer.parseInt(JWT.decode(token).getAudience().get(0));
             } catch (JWTDecodeException e) {
                 throw new RuntimeException("token情報を取得できませんでした");
             }
@@ -51,7 +51,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (user == null) {
                 throw new RuntimeException("ユーザが存在しません。もう一度ログインしてください。");
             }
-            // 验证 token
+
             try {
                 JWTVerifier verifier =  JWT.require(Algorithm.HMAC256(user.getPassword())).build();
                 try {

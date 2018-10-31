@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public Object handleException(Exception e) {
         String msg = e.getMessage();
         if (msg == null || msg.equals("")) {
-            msg = "服务器出错";
+            msg = "";
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("error", msg);
